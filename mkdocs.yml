@@ -1,0 +1,111 @@
+site_name: Univona 官方 Wiki
+site_description: Univona 官方文档、API 参考与部署指南
+site_url: https://univona.github.io/univona-wiki/
+repo_url: https://github.com/univona/univona-wiki
+repo_name: univona/univona-wiki
+edit_uri: blob/main/
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: 切换到深色模式
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到浅色模式
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+
+nav:
+  - 首页: index.md
+  - 01 项目介绍:
+      - 产品概述: 01-项目介绍/产品概述.md
+      - 核心特性: 01-项目介绍/核心特性.md
+      - 目标用户: 01-项目介绍/目标用户.md
+      - 竞争优势: 01-项目介绍/竞争优势.md
+  - 02 系统架构:
+      - 整体架构: 02-系统架构/整体架构.md
+      - 三种连接模式: 02-系统架构/三种连接模式.md
+      - Daemon-Panel-AdminServer: 02-系统架构/Daemon-Panel-AdminServer.md
+      - 认证体系: 02-系统架构/认证体系.md
+      - 通信协议: 02-系统架构/通信协议.md
+      - Protobuf 协议: 02-系统架构/Protobuf协议.md
+  - 03 功能模块:
+      - 身份系统: 03-功能模块/身份系统.md
+      - 端到端加密: 03-功能模块/端到端加密.md
+      - 频道管理: 03-功能模块/频道管理.md
+      - 消息系统: 03-功能模块/消息系统.md
+      - 媒体文件: 03-功能模块/媒体文件.md
+      - 推送通知: 03-功能模块/推送通知.md
+      - 离线消息中继: 03-功能模块/离线消息中继.md
+      - 多设备同步: 03-功能模块/多设备同步.md
+      - 权限控制: 03-功能模块/权限控制.md
+      - Bot 系统: 03-功能模块/Bot系统.md
+  - 04 API 参考:
+      - API 总览: 04-API参考/API总览.md
+      - Admin Server API: 04-API参考/Admin-Server-API.md
+      - Daemon API: 04-API参考/Daemon-API.md
+      - 认证流程: 04-API参考/认证流程.md
+      - WebSocket 协议: 04-API参考/WebSocket协议.md
+  - 05 数据库设计:
+      - ER 关系图: 05-数据库设计/ER关系图.md
+      - Admin Server 表结构: 05-数据库设计/Admin-Server表结构.md
+      - Daemon 表结构: 05-数据库设计/Daemon表结构.md
+      - 迁移历史: 05-数据库设计/迁移历史.md
+  - 06 源码导读:
+      - 仓库概览: 06-源码导读/仓库概览.md
+      - univona-shared: 06-源码导读/univona-shared.md
+      - univona-admin-server: 06-源码导读/univona-admin-server.md
+      - univona-daemon: 06-源码导读/univona-daemon.md
+      - univona-panel: 06-源码导读/univona-panel.md
+      - univona-client-rust: 06-源码导读/univona-client-rust.md
+      - univona-client-flutter: 06-源码导读/univona-client-flutter.md
+      - admin-panel 前端: 06-源码导读/admin-panel前端.md
+  - 07 部署指南:
+      - 快速开始: 07-部署指南/快速开始.md
+      - 生产部署: 07-部署指南/生产部署.md
+      - Docker 部署: 07-部署指南/Docker部署.md
+      - Nginx + TLS: 07-部署指南/Nginx-TLS.md
+  - 08 配置参考:
+      - Admin Server 配置: 08-配置参考/Admin-Server配置.md
+      - Daemon 配置: 08-配置参考/Daemon配置.md
+      - 环境变量: 08-配置参考/环境变量.md
+  - 09 开发指南:
+      - 开发环境搭建: 09-开发指南/开发环境搭建.md
+      - 贡献指南: 09-开发指南/贡献指南.md
+      - 代码风格: 09-开发指南/代码风格.md
+      - 测试指南: 09-开发指南/测试指南.md
+  - 10 路线图:
+      - 开发路线图: 10-路线图/开发路线图.md
+      - 变更日志: 10-路线图/变更日志.md
