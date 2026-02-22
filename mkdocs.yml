@@ -72,6 +72,7 @@ nav:
       - 多设备同步: 03-功能模块/多设备同步.md
       - 权限控制: 03-功能模块/权限控制.md
       - Bot 系统: 03-功能模块/Bot系统.md
+      - P2P 通信: 03-功能模块/P2P通信.md
   - 04 API 参考:
       - API 总览: 04-API参考/API总览.md
       - Admin Server API: 04-API参考/Admin-Server-API.md
