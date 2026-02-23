@@ -451,6 +451,8 @@ curl "http://localhost:3000/api/v1/admin/kyc?status=pending" \
 }
 ```
 
+> 说明：`member_count` 由 Daemon 心跳同步更新（约 60 秒刷新周期），因此新部署或刚加入时可能存在短暂延迟。
+
 ### PUT /api/v1/admin/communities/{id}/approve
 
 审批通过社区。将状态设为 `active`，`is_listed` 设为 `true`。
