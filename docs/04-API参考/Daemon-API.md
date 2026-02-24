@@ -607,7 +607,7 @@ curl "http://localhost:3000/api/v1/channels/{channel_id}/messages?before={msg_id
 
 **成功响应 (200)：** `{"success": true, "data": null}`
 
-### GET /api/v1/channels/{id}/pins
+### GET /api/v1/channels/{id}/pinned
 
 获取频道置顶消息列表。
 
@@ -625,47 +625,6 @@ curl "http://localhost:3000/api/v1/channels/{channel_id}/messages?before={msg_id
     }
   ]
 }
-```
-
-### GET /api/v1/channels/{id}/messages/search
-
-在频道内搜索消息。仅搜索未加密的明文内容（`plaintext_content` 字段），使用 ILIKE 模糊匹配。
-
-**查询参数：**
-
-| 参数 | 类型 | 必填 | 默认值 | 说明 |
-|------|------|------|--------|------|
-| q | string | 是 | -- | 搜索关键词（1-200 字符） |
-| limit | integer | 否 | 20 | 返回条数（最大 50） |
-
-**成功响应 (200)：**
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "uuid",
-      "channel_id": "uuid",
-      "sender_id": "uuid",
-      "message_type": "1",
-      "encrypted_content": [222, 173, ...],
-      "is_encrypted": true,
-      "plaintext_content": "包含关键词的内容",
-      "server_timestamp": 1709100000000,
-      "client_timestamp": 1709099999000,
-      "reply_to": null,
-      "created_at": 1709100000000
-    }
-  ]
-}
-```
-
-**curl 示例：**
-
-```bash
-curl "http://localhost:3000/api/v1/channels/{channel_id}/messages/search?q=hello&limit=10" \
-  -H "Authorization: Bearer <user_jwt>"
 ```
 
 ---
@@ -851,7 +810,7 @@ curl -X POST http://localhost:3000/api/v1/media/upload \
 }
 ```
 
-### POST /api/v1/relay/messages/{id}/ack
+### DELETE /api/v1/relay/messages/{message_id}
 
 确认离线消息已接收，从队列中移除。
 
@@ -859,7 +818,7 @@ curl -X POST http://localhost:3000/api/v1/media/upload \
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| id | string | 消息 ID |
+| message_id | string | 消息 ID |
 
 **成功响应 (200)：**
 
@@ -876,7 +835,7 @@ curl -X POST http://localhost:3000/api/v1/media/upload \
 
 ## 推送令牌
 
-### POST /api/v1/push/tokens
+### POST /api/v1/push/token
 
 注册或更新推送令牌。
 
@@ -921,7 +880,7 @@ curl -X POST http://localhost:3000/api/v1/media/upload \
 }
 ```
 
-### POST /api/v1/push/tokens/unregister
+### DELETE /api/v1/push/token
 
 注销推送令牌。
 
@@ -1392,147 +1351,36 @@ curl "http://localhost:3000/api/v1/channels/unread" \
 
 ---
 
-## 语音频道（Voice）
+## 语音房间（Voice Rooms）
 
-### POST /api/v1/channels/{id}/voice
+Daemon 提供独立的语音房间 API（不依赖频道）。客户端可创建房间、加入/离开、查询参与者并切换静音。
 
-加入语音频道。如果该频道没有活跃的语音房间，会自动创建一个新的。
-
-**路径参数：**
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| id | UUID | 频道 ID |
-
-**请求 Body：**
-
-```json
-{
-  "device_id": "uuid",
-  "max_participants": 25
-}
+```
+POST   /api/v1/voice/rooms
+GET    /api/v1/voice/rooms/{room_id}
+DELETE /api/v1/voice/rooms/{room_id}
+POST   /api/v1/voice/rooms/{room_id}/join
+POST   /api/v1/voice/rooms/{room_id}/leave
+GET    /api/v1/voice/rooms/{room_id}/participants
+POST   /api/v1/voice/rooms/{room_id}/mute
 ```
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| device_id | string | 是 | 设备 ID |
-| max_participants | integer | 否 | 最大参与人数（默认 25） |
+> 具体请求/响应字段以 `voice` 模块的结构体定义为准。
 
-**成功响应 (200)：**
+---
 
-```json
-{
-  "success": true,
-  "data": {
-    "room_id": "uuid",
-    "joined": true
-  }
-}
+## 联系人系统（Contacts）
+
+```
+POST /api/v1/contacts/lookup
+GET  /api/v1/contacts/requests
+POST /api/v1/contacts/requests
+POST /api/v1/contacts/requests/{id}/accept
+POST /api/v1/contacts/requests/{id}/reject
+GET  /api/v1/contacts
 ```
 
-**curl 示例：**
-
-```bash
-curl -X POST http://localhost:3000/api/v1/channels/{channel_id}/voice \
-  -H "Authorization: Bearer <user_jwt>" \
-  -H "Content-Type: application/json" \
-  -d '{"device_id": "device-uuid", "max_participants": 25}'
-```
-
-### DELETE /api/v1/channels/{id}/voice
-
-离开语音频道。如果离开后房间为空，房间会自动关闭。
-
-**路径参数：**
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| id | UUID | 频道 ID |
-
-**成功响应 (200)：**
-
-```json
-{
-  "success": true,
-  "data": {
-    "left": true
-  }
-}
-```
-
-**错误响应 (404)：** 该频道没有活跃的语音房间
-
-**curl 示例：**
-
-```bash
-curl -X DELETE http://localhost:3000/api/v1/channels/{channel_id}/voice \
-  -H "Authorization: Bearer <user_jwt>"
-```
-
-### GET /api/v1/channels/{id}/voice/participants
-
-获取语音频道的当前参与者列表。
-
-**路径参数：**
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| id | UUID | 频道 ID |
-
-**成功响应 (200)：**
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "member_id": "uuid",
-      "device_id": "device-uuid",
-      "muted": false,
-      "joined_at": 1709100000000
-    }
-  ]
-}
-```
-
-**错误响应 (404)：** 该频道没有活跃的语音房间
-
-**curl 示例：**
-
-```bash
-curl "http://localhost:3000/api/v1/channels/{channel_id}/voice/participants" \
-  -H "Authorization: Bearer <user_jwt>"
-```
-
-### PUT /api/v1/channels/{id}/voice/mute
-
-切换自己在语音频道中的静音状态。每次调用会切换状态（静音 -> 取消静音 -> 静音）。
-
-**路径参数：**
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| id | UUID | 频道 ID |
-
-**成功响应 (200)：**
-
-```json
-{
-  "success": true,
-  "data": {
-    "muted": true
-  }
-}
-```
-
-**错误响应 (404)：** 该频道没有活跃的语音房间
-
-**curl 示例：**
-
-```bash
-curl -X PUT http://localhost:3000/api/v1/channels/{channel_id}/voice/mute \
-  -H "Authorization: Bearer <user_jwt>"
-```
+> 接受请求后会返回私聊频道信息（用于创建 DM 会话）。
 
 ---
 
