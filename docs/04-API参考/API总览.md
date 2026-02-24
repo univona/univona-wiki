@@ -70,10 +70,12 @@ Univona Admin Server 提供两套 API 体系，统一部署在同一服务上。
 
 ### Daemon 用户 API（用户 JWT）
 
+> 说明：Daemon 与 Admin Server 的用户 API 路由存在差异（例如 `/push/token`、`/voice/rooms` 等）。下表为 **Daemon 实际路由**（以 `univona-daemon/src/app.rs` 为准）。
+
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | POST | `/api/v1/prekeys` | 上传 PreKey |
-| GET | `/api/v1/prekeys/{member_id}/{device_id}` | 获取 PreKey Bundle |
+| GET | `/api/v1/prekeys/{member_id}` | 获取 PreKey Bundle |
 | DELETE | `/api/v1/prekeys/{device_id}/{key_id}` | 删除 PreKey |
 | GET | `/api/v1/prekeys/{device_id}/count` | PreKey 计数 |
 | POST/GET | `/api/v1/channels` | 创建/列出频道 |
@@ -84,8 +86,7 @@ Univona Admin Server 提供两套 API 体系，统一部署在同一服务上。
 | GET | `/api/v1/channels/{id}/messages` | 获取频道消息 |
 | PUT/DELETE | `/api/v1/messages/{id}` | 编辑/删除消息 |
 | POST/DELETE | `/api/v1/messages/{id}/pin` | 置顶/取消置顶 |
-| GET | `/api/v1/channels/{id}/pins` | 获取置顶消息 |
-| GET | `/api/v1/channels/{id}/messages/search` | 搜索消息 |
+| GET | `/api/v1/channels/{id}/pinned` | 获取置顶消息 |
 | POST/GET | `/api/v1/messages/{id}/reactions` | 添加/列出表情反应 |
 | DELETE | `/api/v1/messages/{id}/reactions/{emoji}` | 删除表情反应 |
 | POST/GET | `/api/v1/channels/{id}/invites` | 创建/列出邀请链接 |
@@ -93,18 +94,21 @@ Univona Admin Server 提供两套 API 体系，统一部署在同一服务上。
 | DELETE | `/api/v1/invites/{code}` | 撤销邀请链接 |
 | PUT | `/api/v1/channels/{id}/read` | 更新已读状态 |
 | GET | `/api/v1/channels/unread` | 获取未读计数 |
-| POST/DELETE | `/api/v1/channels/{id}/voice` | 加入/离开语音频道 |
-| GET | `/api/v1/channels/{id}/voice/participants` | 获取语音参与者 |
-| PUT | `/api/v1/channels/{id}/voice/mute` | 切换语音静音 |
-| PUT | `/api/v1/channels/{id}/history-visible` | 更新历史可见性 |
-| POST | `/api/v1/media/check-hash` | 检查文件哈希（去重） |
+| POST | `/api/v1/voice/rooms` | 创建语音房间 |
+| GET | `/api/v1/voice/rooms/{room_id}` | 获取房间信息 |
+| DELETE | `/api/v1/voice/rooms/{room_id}` | 关闭语音房间 |
+| POST | `/api/v1/voice/rooms/{room_id}/join` | 加入语音房间 |
+| POST | `/api/v1/voice/rooms/{room_id}/leave` | 离开语音房间 |
+| GET | `/api/v1/voice/rooms/{room_id}/participants` | 获取语音参与者 |
+| POST | `/api/v1/voice/rooms/{room_id}/mute` | 切换静音 |
 | POST | `/api/v1/media/upload` | 上传媒体文件 |
 | GET/DELETE | `/api/v1/media/{content_id}` | 下载/删除媒体 |
 | GET | `/api/v1/media/{content_id}/thumbnail` | 获取缩略图 |
 | POST/GET | `/api/v1/relay/messages` | 上传/获取离线消息 |
-| POST | `/api/v1/relay/messages/{id}/ack` | 确认离线消息 |
-| POST/GET | `/api/v1/push/tokens` | 注册/列出推送令牌 |
-| POST | `/api/v1/push/tokens/unregister` | 注销推送令牌 |
+| DELETE | `/api/v1/relay/messages/{message_id}` | 确认离线消息 |
+| POST | `/api/v1/push/token` | 注册推送令牌 |
+| DELETE | `/api/v1/push/token` | 注销推送令牌 |
+| GET | `/api/v1/push/tokens` | 列出推送令牌 |
 | POST/GET | `/api/v1/bots` | 创建/列出 Bot |
 | GET/PUT/DELETE | `/api/v1/bots/{id}` | Bot 详情/更新/删除 |
 | POST/GET | `/api/v1/admin/bans` | 创建/列出封禁 |
@@ -118,6 +122,11 @@ Univona Admin Server 提供两套 API 体系，统一部署在同一服务上。
 | GET | `/api/v1/community/permissions` | 获取权限矩阵 |
 | PUT | `/api/v1/community/permissions` | 批量更新权限覆盖 |
 | DELETE | `/api/v1/community/permissions/{role}/{permission}` | 删除权限覆盖 |
+| POST/GET | `/api/v1/contacts/requests` | 发送/列出联系人请求 |
+| POST | `/api/v1/contacts/requests/{id}/accept` | 接受请求 |
+| POST | `/api/v1/contacts/requests/{id}/reject` | 拒绝请求 |
+| POST | `/api/v1/contacts/lookup` | 查找联系人 |
+| GET | `/api/v1/contacts` | 列出联系人 |
 | GET | `/api/v1/admin/monitor/stats` | 内容监控统计概览 |
 | GET | `/api/v1/admin/monitor/channels` | 监控频道列表 |
 | GET | `/api/v1/admin/monitor/channels/{id}/messages` | 频道消息列表 |

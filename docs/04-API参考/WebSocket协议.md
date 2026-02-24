@@ -67,10 +67,13 @@ message Envelope {
 
 ## 消息类型
 
+> 枚举定义以 `protocol/univona/v1/envelope.proto` 为准。
+
 ### 内容消息（持久化，需要序列号）
 
 | 类型 ID | 名称 | 方向 | 说明 |
 |---------|------|------|------|
+| 0 | UNSPECIFIED | 双向 | 未指定类型（保留值） |
 | 1 | TEXT | 双向 | 文本消息 |
 | 2 | IMAGE | 双向 | 图片消息 |
 | 3 | FILE | 双向 | 文件消息 |
@@ -106,6 +109,16 @@ message Envelope {
 |---------|------|------|------|
 | 40 | DEVICE_ANNOUNCEMENT | 双向 | 新设备声明 |
 | 41 | DEVICE_REVOCATION | 双向 | 设备撤销 |
+
+### P2P 信令消息（不持久化）
+
+| 类型 ID | 名称 | 方向 | 说明 |
+|---------|------|------|------|
+| 50 | P2P_OFFER | 双向 | WebRTC Offer |
+| 51 | P2P_ANSWER | 双向 | WebRTC Answer |
+| 52 | P2P_ICE_CANDIDATE | 双向 | ICE 候选 |
+| 53 | P2P_SESSION_INIT | 双向 | 会话初始化 |
+| 54 | P2P_SESSION_CLOSE | 双向 | 会话关闭 |
 
 ## 消息路由
 
