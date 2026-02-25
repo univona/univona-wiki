@@ -1378,9 +1378,38 @@ POST /api/v1/contacts/requests
 POST /api/v1/contacts/requests/{id}/accept
 POST /api/v1/contacts/requests/{id}/reject
 GET  /api/v1/contacts
+POST /api/v1/contacts/presence
 ```
 
 > 接受请求后会返回私聊频道信息（用于创建 DM 会话）。
+
+### POST /api/v1/contacts/presence
+
+批量查询联系人在线状态（基于 Redis `online:{member_id}` 缓存）。
+
+**请求 Body：**
+
+```json
+{
+  "member_ids": ["uuid1", "uuid2"]
+}
+```
+
+**成功响应 (200)：**
+
+```json
+{
+  "success": true,
+  "data": {
+    "members": [
+      { "member_id": "uuid1", "online": true },
+      { "member_id": "uuid2", "online": false }
+    ]
+  }
+}
+```
+
+> 在线状态缓存由 WebSocket 心跳刷新（默认 TTL 300 秒）。
 
 ---
 

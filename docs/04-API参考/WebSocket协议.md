@@ -103,6 +103,17 @@ message Envelope {
 | 30 | SYSTEM | 服务端→客户端 | 系统通知 |
 | 31 | GROUP_MEMBER_CHANGE | 服务端→客户端 | 群成员变更通知 |
 
+#### SYSTEM 消息载荷（JSON）
+
+系统消息 `encrypted_content` 实际为 JSON 字节，常见 `type`：
+
+| type | 说明 | 主要字段 |
+|------|------|----------|
+| `contact_request` | 新联系人请求通知 | `request_id`, `from_member_id`, `from_username?`, `from_display_name?`, `message?`, `community_name?` |
+| `contact_accepted` | 联系人请求已接受 | `channel_id`, `contact_member_id`, `contact_username` |
+
+> `from_username`、`from_display_name`、`community_name` 由服务端可用数据填充，可能为空或缺失。
+
 ### 设备管理消息
 
 | 类型 ID | 名称 | 方向 | 说明 |

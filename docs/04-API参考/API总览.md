@@ -129,6 +129,7 @@ Univona Admin Server 提供两套 API 体系，统一部署在同一服务上。
 | POST | `/api/v1/contacts/requests/{id}/reject` | 拒绝请求 |
 | POST | `/api/v1/contacts/lookup` | 查找联系人 |
 | GET | `/api/v1/contacts` | 列出联系人 |
+| POST | `/api/v1/contacts/presence` | 批量查询联系人在线状态 |
 | POST/GET | `/api/v1/admin/bans` | 创建/列出封禁 |
 | DELETE | `/api/v1/admin/bans/{ban_id}` | 解除封禁 |
 | POST/DELETE | `/api/v1/channels/{id}/mute/{member_id}` | 禁言/解除禁言 |
@@ -159,7 +160,7 @@ Univona Admin Server 提供两套 API 体系，统一部署在同一服务上。
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| GET | `/healthz` | 简单健康检查（daemon 兼容） |
+| GET | `/healthz` | 简单健康检查（返回 `community_name`） |
 
 ### Daemon 状态（公开）
 

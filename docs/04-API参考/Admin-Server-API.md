@@ -78,6 +78,7 @@ curl -X POST http://localhost:3000/api/v1/admin/login \
   "status": "healthy",
   "service": "univona-admin-server",
   "version": "0.1.0",
+  "community_name": "Univona",
   "uptime_seconds": 3600,
   "database": {
     "status": "ok",
@@ -95,16 +96,14 @@ curl http://localhost:3000/api/health
 
 ### GET /healthz
 
-简单健康检查，用于负载均衡器和 Daemon 兼容。
+简单健康检查，用于负载均衡器和 Daemon 兼容（返回 `community_name` 便于识别来源社区）。
 
 **成功响应 (200)：**
 
 ```json
 {
   "status": "ok",
-  "service": "univona-admin-server",
-  "version": "0.1.0",
-  "uptime_seconds": 3600
+  "community_name": "Univona"
 }
 ```
 

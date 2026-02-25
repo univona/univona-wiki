@@ -24,6 +24,10 @@ host = "0.0.0.0"
 # 默认值: 3001
 port = 3001
 
+# 社区名称（用于健康检查、联系人通知等）
+# 默认值: "Univona"
+community_name = "Univona"
+
 # ─── 数据库 ────────────────────────────────────────────────
 [database]
 # PostgreSQL 连接字符串（必须）
@@ -94,6 +98,7 @@ sandbox = false
 |------|------|--------|------|
 | `host` | String | `"0.0.0.0"` | 监听地址。生产环境建议设为 `"127.0.0.1"`，通过反向代理访问 |
 | `port` | u16 | `3001` | 监听端口 |
+| `community_name` | String | `"Univona"` | 社区名称（用于健康检查、联系人通知等标识） |
 
 ### database
 
@@ -146,6 +151,7 @@ sandbox = false
 # 顶级字段
 export UNIVONA__HOST="127.0.0.1"
 export UNIVONA__PORT="8080"
+export UNIVONA__COMMUNITY_NAME="Univona"
 
 # 数据库配置
 export UNIVONA__DATABASE__URL="postgres://user:pass@localhost/univona"
