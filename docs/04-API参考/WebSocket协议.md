@@ -45,7 +45,7 @@ WebSocket 端点：`/ws?token=<user_jwt>`
 
 ## 消息格式
 
-所有 WebSocket 消息使用 **Protobuf 编码**的 `Envelope` 格式传输（Binary 帧），不接受 Text 帧。
+服务端发送的数据帧均为 **Binary 帧**。主协议为 Protobuf `Envelope`，少量系统事件会发送为 JSON 字节（仍是 Binary 帧）。
 
 ```protobuf
 syntax = "proto3";
@@ -113,6 +113,26 @@ message Envelope {
 | `contact_accepted` | 联系人请求已接受 | `channel_id`, `contact_member_id`, `contact_username` |
 
 > `from_username`、`from_display_name`、`community_name` 由服务端可用数据填充，可能为空或缺失。
+
+### 系统事件（JSON Binary 帧）
+
+部分系统事件不走 Protobuf `MessageType`，而是直接发送 JSON 字节（`Message::Binary`）。
+
+| 事件 | 方向 | 字段 |
+|------|------|------|
+| `MESSAGE_RECALLED` | Server -> Client | `message_id`, `channel_id`, `recalled_by`, `timestamp` |
+
+示例：
+
+```json
+{
+  "type": "MESSAGE_RECALLED",
+  "message_id": "8a9f...",
+  "channel_id": "6b2d...",
+  "recalled_by": "3f14...",
+  "timestamp": 1772850000000
+}
+```
 
 ### 设备管理消息
 
@@ -199,11 +219,11 @@ WebSocket 连接建立后，服务端自动执行：
 
 | 策略 | 说明 |
 |------|------|
-| `optional` | 可选加密（默认），未加密消息以明文存储 |
-| `preferred` | 推荐加密 |
-| `required` | 强制加密，未加密消息的明文不会被存储 |
+| `plaintext` | 明文存储，支持搜索/审计 |
+| `e2e_required` | 强制端到端加密 |
+| `admin_encrypted` | 管理员启用加密（同 E2EE 协议） |
 
-当策略为 `required` 或消息标记为加密时，`plaintext_content` 字段不会被保存。
+当策略为 `e2e_required` / `admin_encrypted` 或消息标记为加密时，`plaintext_content` 字段不会被保存。
 
 ## 重连策略
 

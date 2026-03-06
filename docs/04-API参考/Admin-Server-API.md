@@ -1,6 +1,8 @@
 # Admin Server API 参考
 
-本文档包含管理面板所有端点的详细参考。
+本文档包含 Admin-Server 的管理端点（`/api/v1/admin/*`）详细参考。
+
+> 说明：Admin-Server 还内置了用户 API（如 `/api/v1/channels/*`、`/api/v1/messages/*`）。这些用户端点在 [Daemon-API](./Daemon-API.md) 与 [API总览](./API总览.md) 统一维护，避免重复。
 
 ## 认证
 
@@ -1278,3 +1280,32 @@ curl -X PUT http://localhost:3000/api/v1/admin/permissions \
 curl -X DELETE http://localhost:3000/api/v1/admin/permissions/moderator/view_audit_log \
   -H "Authorization: Bearer <admin_jwt>"
 ```
+
+---
+
+## 内置用户 API（新增对齐）
+
+以下端点运行在 Admin-Server 内，但认证方式为**用户 JWT**（非 Admin JWT），路径对外均为 `/api/v1/...`。
+
+| 方法 | 路径 | 功能 |
+|------|------|------|
+| POST | `/api/v1/messages/{id}/recall` | 撤回消息 |
+| GET | `/api/v1/channels/{id}/notification-level` | 获取通知级别 |
+| PUT | `/api/v1/channels/{id}/notification-level` | 设置通知级别 |
+| GET | `/api/v1/channels/{id}/mentions` | 获取 @mentions |
+| POST | `/api/v1/categories` | 创建分类 |
+| GET | `/api/v1/categories` | 列出分类 |
+| PUT | `/api/v1/categories/{id}` | 更新分类 |
+| DELETE | `/api/v1/categories/{id}` | 删除分类 |
+| PUT | `/api/v1/channels/{id}/category` | 设置频道分类 |
+| POST | `/api/v1/user/export` | GDPR 数据导出 |
+| DELETE | `/api/v1/user` | 请求删除账号 |
+| POST | `/api/v1/user/cancel-deletion` | 取消删除请求 |
+
+相关实现入口：
+
+- `univona-admin-server/src/app.rs`
+- `univona-admin-server/src/api/recall.rs`
+- `univona-admin-server/src/api/notification_api.rs`
+- `univona-admin-server/src/api/categories.rs`
+- `univona-admin-server/src/api/user_data.rs`

@@ -18,6 +18,18 @@
 - `crypto/`：X3DH + Double Ratchet
 - `storage/`：SQLCipher 本地数据库
 - `search/`：FTS5 全文搜索
+- `api.rs`：Flutter FFI 导出入口（含 SenderKey 群聊加密能力）
+
+## FFI 关键函数
+
+以下函数通过 flutter_rust_bridge 暴露到 Dart：
+
+- `create_sender_key`
+- `process_sender_key_distribution`
+- `group_encrypt`
+- `group_decrypt`
+- `rotate_sender_key`
+- `has_sender_key`
 
 ## 相关文档
 
